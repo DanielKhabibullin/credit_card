@@ -1,0 +1,14 @@
+{
+	"name": "credit_card",
+	"version": "1.0.0",
+	"source": "index.html",
+	"scripts": {
+		"dev" : "parcel",
+		"build": "parcel build"
+	},
+	"author": "Daniel Khabibullin",
+	"dependencies": {
+		"parcel": "^2.8.3",
+		"redom": "^3.29.1"
+	}
+}
