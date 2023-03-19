@@ -1,4 +1,10 @@
 /node_modules/
-/dist/
+/fonts/
+/css/
+/image/
+/script/
 /.parcel-cache/
 package-lock.json
+.eslinrc
+package.json
+index.html
