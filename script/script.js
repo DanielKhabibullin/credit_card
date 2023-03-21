@@ -5,7 +5,8 @@ const createCard = () => {
 	const inputNumber = el(`input.input input__number`, {maxlength: '19'});
 	const inputDate = el(`input.input input__date`,
 		{type: `text`, maxlength: '5'});
-	const inputCvv = el(`input.input input__cvv`, {type: `text`});
+	const inputCvv = el(`input.input input__cvv`, {
+		type: `text`, maxlength: '3'});
 	const holder = el(`div.form__input-wrap form__input-wrap_holder`,
 		el(`label.form__label form__holder-label`, `Card Holder`), inputHolder);
 	const number = el(`div.form__input-wrap form__input-wrap_holder`,
@@ -15,8 +16,23 @@ const createCard = () => {
 	const cvv = el(`div.form__input-wrap form__input-wrap_cvv`,
 		el(`label.form__label form__cvv-label`, `CVV`), inputCvv);
 	const button = el('button.form__button', 'CHECK OUT');
+
+	const cvvError = el('div.error', {style: 'display: none'}, 'Invalid CVV');
+	const cvvRegex = /^[0-9]{3,3}$/;
+
+	const dateError = el('div.error', {style: 'display: none'}, 'Invalid Date');
+
+	inputCvv.addEventListener('input', e => {
+		const currentValue = e.target.value;
+		if (cvvRegex.test(currentValue)) {
+			cvvError.style.display = 'none';
+		} else {
+			cvvError.style.display = 'block';
+		}
+	});
+
 	const form = el('form.form#form', {action: '#'}, holder, number,
-		date, cvv, button);
+		date, cvv, button, cvvError, dateError);
 
 	const cardName = el('span.card__name', 'John Doe');
 	const cardDate = el('span.card__date', 'MM/YY');
@@ -26,8 +42,15 @@ const createCard = () => {
 	const card = el('div.card',
 		el('p.secure', 'Secure Checkout'), creditCard, form);
 
+	const nameRegex = /^[a-zA-Z ]*$/;
+
 	inputHolder.addEventListener('input', e => {
-		cardName.textContent = e.target.value;
+		const currentValue = e.target.value;
+		if (nameRegex.test(currentValue)) {
+			cardName.textContent = currentValue;
+		} else {
+			e.target.value = currentValue.slice(0, -1);
+		}
 	});
 	inputNumber.addEventListener('input', e => {
 		const currentValue = e.target.value;
