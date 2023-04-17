@@ -3,12 +3,21 @@
 	"version": "1.0.0",
 	"source": "index.html",
 	"scripts": {
-		"dev" : "parcel",
-		"build": "parcel build"
+		"dev": "parcel",
+		"build": "parcel build",
+		"test:unit": "jest",
+		"test": "npm i && jest"
 	},
 	"author": "Daniel Khabibullin",
 	"dependencies": {
-		"parcel": "^2.8.3",
 		"redom": "^3.29.1"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.21.0",
+		"@babel/core": "^7.21.4",
+		"@babel/preset-env": "^7.21.4",
+		"babel-jest": "^29.5.0",
+		"jest": "^29.5.0",
+		"jest-environment-jsdom": "^29.5.0"
 	}
 }

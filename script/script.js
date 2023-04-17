@@ -1,4 +1,19 @@
 import {el, setChildren} from '../node_modules/redom/dist/redom.es.js';
+export const validateCardHolder = name => /^[a-zA-Z ]*$/.test(name);
+export const validateCardNumber2 = number => /^[0-9 ]*$/.test(number);
+export const validateCardNumber3 = number => {
+	const regex = /^[0-9 ]*$/;
+	if (!regex.test(number)) {
+		return false;
+	}
+	const digitsOnly = number.replace(/\s/g, '');
+	if (digitsOnly.length !== 16) {
+		return false;
+	}
+	return true;
+};
+export const validateCVV4 = cvv => /^[0-9]{3}$/.test(cvv);
+export const validateCVV5 = cvv => /^[0-9]{3}$/.test(cvv);
 
 const createCard = () => {
 	const inputHolder = el(`input.input input__holder`, {type: `text`});
@@ -15,7 +30,8 @@ const createCard = () => {
 		el(`label.form__label form__date-label`, `Card Expiry`), inputDate);
 	const cvv = el(`div.form__input-wrap form__input-wrap_cvv`,
 		el(`label.form__label form__cvv-label`, `CVV`), inputCvv);
-	const button = el('button.form__button', 'CHECK OUT');
+	const button = el('button.form__button', {type: 'submit'}, 'CHECK OUT');
+	const validateMessage = el('h2', {style: 'display: none'});
 
 	const cvvError = el('div.error', {style: 'display: none'}, 'Invalid CVV');
 	const cvvRegex = /^[0-9]{3,3}$/;
@@ -32,7 +48,7 @@ const createCard = () => {
 	});
 
 	const form = el('form.form#form', {action: '#'}, holder, number,
-		date, cvv, button, cvvError, dateError);
+		date, cvv, button, cvvError, dateError, validateMessage);
 
 	const cardName = el('span.card__name', 'John Doe');
 	const cardDate = el('span.card__date', 'MM/YY');
@@ -70,6 +86,34 @@ const createCard = () => {
 			.replace(/^(\d{2})(\d)/g, '$1/$2')
 			.trim();
 		cardDate.textContent = e.target.value;
+	});
+
+	inputCvv.addEventListener('input', e => {
+		const currentValue = e.target.value;
+		e.target.value = currentValue
+			.replace(/\D/g, '')
+			.trim()
+			.slice(0, 3);
+	});
+
+	form.addEventListener('submit', e => {
+		e.preventDefault();
+		const cardHolder = inputHolder.value;
+		const cardNumber = inputNumber.value;
+		const cvv = inputCvv.value;
+
+		const isCardHolderValid = validateCardHolder(cardHolder);
+		const isCardNumberValid = validateCardNumber3(cardNumber);
+		const isCVVValid = validateCVV5(cvv);
+
+		const isValid = isCardHolderValid && isCardNumberValid && isCVVValid;
+
+		validateMessage.style.display = 'block';
+		validateMessage.textContent = isValid ? 'Valid data' : 'Invalid data';
+		validateMessage.style.textAlign = 'center';
+		setTimeout(() => {
+			validateMessage.style.display = 'none';
+		}, 2000);
 	});
 
 	return el('div.wrapper', card);

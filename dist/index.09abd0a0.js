@@ -557,36 +557,78 @@ function hmrAccept(bundle, id) {
 }
 
 },{}],"83FZ8":[function(require,module,exports) {
-var _redomEsJs = require("../node_modules/redom/dist/redom.es.js");
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.validateCardNumber3 = exports.validateCardNumber2 = exports.validateCardHolder = exports.validateCVV5 = exports.validateCVV4 = void 0;
+var _redomEs = require("d9b7f72a67d3a161");
+const validateCardHolder = (name)=>/^[a-zA-Z ]*$/.test(name);
+exports.validateCardHolder = validateCardHolder;
+const validateCardNumber2 = (number)=>/^[0-9 ]*$/.test(number);
+exports.validateCardNumber2 = validateCardNumber2;
+const validateCardNumber3 = (number)=>{
+    const regex = /^[0-9 ]*$/;
+    if (!regex.test(number)) return false;
+    const digitsOnly = number.replace(/\s/g, "");
+    if (digitsOnly.length !== 16) return false;
+    return true;
+};
+exports.validateCardNumber3 = validateCardNumber3;
+const validateCVV4 = (cvv)=>/^[0-9]{3}$/.test(cvv);
+exports.validateCVV4 = validateCVV4;
+const validateCVV5 = (cvv)=>/^[0-9]{3}$/.test(cvv);
+exports.validateCVV5 = validateCVV5;
 const createCard = ()=>{
-    const inputHolder = (0, _redomEsJs.el)(`input.input input__holder`, {
+    const inputHolder = (0, _redomEs.el)(`input.input input__holder`, {
         type: `text`
     });
-    const inputNumber = (0, _redomEsJs.el)(`input.input input__number`, {
+    const inputNumber = (0, _redomEs.el)(`input.input input__number`, {
         maxlength: "19"
     });
-    const inputDate = (0, _redomEsJs.el)(`input.input input__date`, {
+    const inputDate = (0, _redomEs.el)(`input.input input__date`, {
         type: `text`,
         maxlength: "5"
     });
-    const inputCvv = (0, _redomEsJs.el)(`input.input input__cvv`, {
-        type: `text`
+    const inputCvv = (0, _redomEs.el)(`input.input input__cvv`, {
+        type: `text`,
+        maxlength: "3"
     });
-    const holder = (0, _redomEsJs.el)(`div.form__input-wrap form__input-wrap_holder`, (0, _redomEsJs.el)(`label.form__label form__holder-label`, `Card Holder`), inputHolder);
-    const number = (0, _redomEsJs.el)(`div.form__input-wrap form__input-wrap_holder`, (0, _redomEsJs.el)(`label.form__label form__number-label`, `Card Number`), inputNumber);
-    const date = (0, _redomEsJs.el)(`div.form__input-wrap form__input-wrap_holder`, (0, _redomEsJs.el)(`label.form__label form__date-label`, `Card Expiry`), inputDate);
-    const cvv = (0, _redomEsJs.el)(`div.form__input-wrap form__input-wrap_cvv`, (0, _redomEsJs.el)(`label.form__label form__cvv-label`, `CVV`), inputCvv);
-    const button = (0, _redomEsJs.el)("button.form__button", "CHECK OUT");
-    const form = (0, _redomEsJs.el)("form.form#form", {
+    const holder = (0, _redomEs.el)(`div.form__input-wrap form__input-wrap_holder`, (0, _redomEs.el)(`label.form__label form__holder-label`, `Card Holder`), inputHolder);
+    const number = (0, _redomEs.el)(`div.form__input-wrap form__input-wrap_holder`, (0, _redomEs.el)(`label.form__label form__number-label`, `Card Number`), inputNumber);
+    const date = (0, _redomEs.el)(`div.form__input-wrap form__input-wrap_holder`, (0, _redomEs.el)(`label.form__label form__date-label`, `Card Expiry`), inputDate);
+    const cvv = (0, _redomEs.el)(`div.form__input-wrap form__input-wrap_cvv`, (0, _redomEs.el)(`label.form__label form__cvv-label`, `CVV`), inputCvv);
+    const button = (0, _redomEs.el)("button.form__button", {
+        type: "submit"
+    }, "CHECK OUT");
+    const validateMessage = (0, _redomEs.el)("h2", {
+        style: "display: none"
+    });
+    const cvvError = (0, _redomEs.el)("div.error", {
+        style: "display: none"
+    }, "Invalid CVV");
+    const cvvRegex = /^[0-9]{3,3}$/;
+    const dateError = (0, _redomEs.el)("div.error", {
+        style: "display: none"
+    }, "Invalid Date");
+    inputCvv.addEventListener("input", (e)=>{
+        const currentValue = e.target.value;
+        if (cvvRegex.test(currentValue)) cvvError.style.display = "none";
+        else cvvError.style.display = "block";
+    });
+    const form = (0, _redomEs.el)("form.form#form", {
         action: "#"
-    }, holder, number, date, cvv, button);
-    const cardName = (0, _redomEsJs.el)("span.card__name", "John Doe");
-    const cardDate = (0, _redomEsJs.el)("span.card__date", "MM/YY");
-    const cardNumber = (0, _redomEsJs.el)("span.card__number", "xxxx xxxx xxxx xxxx");
-    const creditCard = (0, _redomEsJs.el)("div.credit-card", cardNumber, (0, _redomEsJs.el)("div.card__personal", cardName, cardDate));
-    const card = (0, _redomEsJs.el)("div.card", (0, _redomEsJs.el)("p.secure", "Secure Checkout"), creditCard, form);
+    }, holder, number, date, cvv, button, cvvError, dateError, validateMessage);
+    const cardName = (0, _redomEs.el)("span.card__name", "John Doe");
+    const cardDate = (0, _redomEs.el)("span.card__date", "MM/YY");
+    const cardNumber = (0, _redomEs.el)("span.card__number", "xxxx xxxx xxxx xxxx");
+    const creditCard = (0, _redomEs.el)("div.credit-card", cardNumber, (0, _redomEs.el)("div.card__personal", cardName, cardDate));
+    const card = (0, _redomEs.el)("div.card", (0, _redomEs.el)("p.secure", "Secure Checkout"), creditCard, form);
+    const nameRegex = /^[a-zA-Z ]*$/;
     inputHolder.addEventListener("input", (e)=>{
-        cardName.textContent = e.target.value;
+        const currentValue = e.target.value;
+        if (nameRegex.test(currentValue)) cardName.textContent = currentValue;
+        else e.target.value = currentValue.slice(0, -1);
     });
     inputNumber.addEventListener("input", (e)=>{
         const currentValue = e.target.value;
@@ -599,11 +641,31 @@ const createCard = ()=>{
         e.target.value = currentValue.replace(/\D/g, "").replace(/^(\d{2})(\d)/g, "$1/$2").trim();
         cardDate.textContent = e.target.value;
     });
-    return (0, _redomEsJs.el)("div.wrapper", card);
+    inputCvv.addEventListener("input", (e)=>{
+        const currentValue = e.target.value;
+        e.target.value = currentValue.replace(/\D/g, "").trim().slice(0, 3);
+    });
+    form.addEventListener("submit", (e)=>{
+        e.preventDefault();
+        const cardHolder = inputHolder.value;
+        const cardNumber = inputNumber.value;
+        const cvv = inputCvv.value;
+        const isCardHolderValid = validateCardHolder(cardHolder);
+        const isCardNumberValid = validateCardNumber3(cardNumber);
+        const isCVVValid = validateCVV5(cvv);
+        const isValid = isCardHolderValid && isCardNumberValid && isCVVValid;
+        validateMessage.style.display = "block";
+        validateMessage.textContent = isValid ? "Valid data" : "Invalid data";
+        validateMessage.style.textAlign = "center";
+        setTimeout(()=>{
+            validateMessage.style.display = "none";
+        }, 2000);
+    });
+    return (0, _redomEs.el)("div.wrapper", card);
 };
-(0, _redomEsJs.setChildren)(document.body, createCard());
+(0, _redomEs.setChildren)(document.body, createCard());
 
-},{"../node_modules/redom/dist/redom.es.js":"iahd6"}],"iahd6":[function(require,module,exports) {
+},{"d9b7f72a67d3a161":"iahd6"}],"iahd6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "List", ()=>List);
